@@ -1,12 +1,9 @@
 ﻿namespace NET.Seeder
 {
-    /// <summary>
-    /// Represents a parameter to be used in a SQL query.
-    /// </summary>
     public class Parameter
     {
-        public string Name { get; }
-        public object Value { get; }
+        public string Name { get; init; }
+        public object Value { get; init; }
 
         public Parameter(string name, object value)
         {

@@ -20,17 +20,20 @@
             var seedBuilder = new SeedBuilder<User>()
                 .WithEntity(user);
 
-            var sql = seedBuilder.GenerateSql(out var parameters);
+            var seed = seedBuilder.GenerateSeed();
 
             // Assert
-            Assert.Equal(expectedSql, sql);
-
-            Assert.Collection(parameters,
-                p0 => Assert.Equal(new Parameter("@p0", 1), p0),
-                p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
-                p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
-                p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
-            );
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(seed);
+                Assert.Equal(expectedSql, seed.Query);
+                Assert.Collection(seed.Parameters,
+                    p0 => Assert.Equal(new Parameter("@p0", 1), p0),
+                    p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
+                    p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
+                    p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
+                );
+            });
         }
 
         [Fact]
@@ -52,17 +55,20 @@
                 .WithTableName("users")
                 .WithEntity(user);
 
-            var sql = seedBuilder.GenerateSql(out var parameters);
+            var seed = seedBuilder.GenerateSeed();
 
             // Assert
-            Assert.Equal(expectedSql, sql);
-
-            Assert.Collection(parameters,
-                p0 => Assert.Equal(new Parameter("@p0", 1), p0),
-                p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
-                p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
-                p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
-            );
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(seed);
+                Assert.Equal(expectedSql, seed.Query);
+                Assert.Collection(seed.Parameters,
+                    p0 => Assert.Equal(new Parameter("@p0", 1), p0),
+                    p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
+                    p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
+                    p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
+                );
+            });
         }
 
         [Fact]
@@ -87,17 +93,20 @@
                 .WithColumn(user => user.EmailAddress, "email_address")
                 .WithEntity(user);
 
-            var sql = seedBuilder.GenerateSql(out var parameters);
+            var seed = seedBuilder.GenerateSeed();
 
             // Assert
-            Assert.Equal(expectedSql, sql);
-
-            Assert.Collection(parameters,
-                p0 => Assert.Equal(new Parameter("@p0", 1), p0),
-                p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
-                p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
-                p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
-            );
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(seed);
+                Assert.Equal(expectedSql, seed.Query);
+                Assert.Collection(seed.Parameters,
+                    p0 => Assert.Equal(new Parameter("@p0", 1), p0),
+                    p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
+                    p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
+                    p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
+                );
+            });
         }
     }
 }

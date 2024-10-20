@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
 
 namespace NET.Seeder
 {
@@ -65,17 +66,23 @@ namespace NET.Seeder
             return this;
         }
 
-        public string GenerateSql(out List<Parameter> parameters)
+        public Seed GenerateSeed()
         {
-            if (string.IsNullOrEmpty(_tableName)) throw new InvalidOperationException("Table name must be specified.");
+            if (string.IsNullOrEmpty(_tableName))
+                throw new InvalidOperationException("Table name must be specified.");
 
+            // Create column names and parameter placeholders
             var columns = string.Join(", ", _values.Keys);
             var placeholders = string.Join(", ", _values.Keys.Select((_, i) => $"@p{i}"));
 
+            // Generate the SQL query
             var sql = $"INSERT INTO {_tableName} ({columns}) VALUES ({placeholders});";
-            parameters = _values.Values.Select((v, i) => new Parameter($"@p{i}", v)).ToList();
 
-            return sql;
+            // Generate the parameters
+            var parameters = _values.Values.Select((v, i) => new Parameter($"@p{i}", v)).ToList();
+
+            // Return the Seed with query and parameters
+            return new Seed(sql, parameters);
         }
     }
 }
