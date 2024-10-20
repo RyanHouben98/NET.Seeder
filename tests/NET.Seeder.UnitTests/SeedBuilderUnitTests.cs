@@ -3,31 +3,100 @@
     public class SeedBuilderUnitTests
     {
         [Fact]
-        public void GenerateSql_ShouldGenerateCorrectInsertStatement_ForUserEntity()
+        public void GenerateSql_WithoutSpecifiedTableName_ShouldUseEntityNameAsTableName()
         {
-            // Arrange: Create a User entity
+            // Arrange
             var user = new User
             {
                 Id = 1,
-                Username = "john_doe",
-                PasswordHash = "secureHash",
-                Email = "john@example.com"
+                FirstName = "John",
+                LastName = "Doe",
+                EmailAddress = "johndoe@email.com"
             };
 
-            // Act: Build the seed for the User entity
-            var seedBuilder = new SeedBuilder<User>().WithEntity(user);
+            var expectedSql = "INSERT INTO User (Id, FirstName, LastName, EmailAddress) VALUES (@p0, @p1, @p2, @p3);";
+
+            // Act
+            var seedBuilder = new SeedBuilder<User>()
+                .WithEntity(user);
+
             var sql = seedBuilder.GenerateSql(out var parameters);
 
-            // Assert: Check that the SQL is generated correctly
-            var expectedSql = "INSERT INTO User (Id, Username, PasswordHash, Email) VALUES (@p0, @p1, @p2, @p3);";
+            // Assert
             Assert.Equal(expectedSql, sql);
 
-            // Assert: Check that the parameters are mapped correctly
             Assert.Collection(parameters,
                 p0 => Assert.Equal(new Parameter("@p0", 1), p0),
-                p1 => Assert.Equal(new Parameter("@p1", "john_doe"), p1),
-                p2 => Assert.Equal(new Parameter("@p2", "secureHash"), p2),
-                p3 => Assert.Equal(new Parameter("@p3", "john@example.com"), p3)
+                p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
+                p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
+                p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
+            );
+        }
+
+        [Fact]
+        public void GenerateSql_WithSpecifiedTableName_ShouldUseSpecifiedNameAsTableName()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                EmailAddress = "johndoe@email.com"
+            };
+
+            var expectedSql = "INSERT INTO users (Id, FirstName, LastName, EmailAddress) VALUES (@p0, @p1, @p2, @p3);";
+
+            // Act
+            var seedBuilder = new SeedBuilder<User>()
+                .WithTableName("users")
+                .WithEntity(user);
+
+            var sql = seedBuilder.GenerateSql(out var parameters);
+
+            // Assert
+            Assert.Equal(expectedSql, sql);
+
+            Assert.Collection(parameters,
+                p0 => Assert.Equal(new Parameter("@p0", 1), p0),
+                p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
+                p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
+                p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
+            );
+        }
+
+        [Fact]
+        public void GenerateSql_WithMappedColumns_ShouldUseSpecifiedNameAsTableName()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                EmailAddress = "johndoe@email.com"
+            };
+
+            var expectedSql = "INSERT INTO users (Id, first_name, last_name, email_address) VALUES (@p0, @p1, @p2, @p3);";
+
+            // Act
+            var seedBuilder = new SeedBuilder<User>()
+                .WithTableName("users")
+                .WithColumn(user => user.FirstName, "first_name")
+                .WithColumn(user => user.LastName, "last_name")
+                .WithColumn(user => user.EmailAddress, "email_address")
+                .WithEntity(user);
+
+            var sql = seedBuilder.GenerateSql(out var parameters);
+
+            // Assert
+            Assert.Equal(expectedSql, sql);
+
+            Assert.Collection(parameters,
+                p0 => Assert.Equal(new Parameter("@p0", 1), p0),
+                p1 => Assert.Equal(new Parameter("@p1", "John"), p1),
+                p2 => Assert.Equal(new Parameter("@p2", "Doe"), p2),
+                p3 => Assert.Equal(new Parameter("@p3", "johndoe@email.com"), p3)
             );
         }
     }
