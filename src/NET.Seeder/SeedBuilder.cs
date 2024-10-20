@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
 
 namespace NET.Seeder
 {
