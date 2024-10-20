@@ -1,5 +1,4 @@
-﻿using NET.Seeder.UnitTests.Configuration;
-using NET.Seeder.UnitTests.Entities;
+﻿using NET.Seeder.UnitTests.Entities;
 
 namespace NET.Seeder.UnitTests
 {
@@ -21,8 +20,6 @@ namespace NET.Seeder.UnitTests
 
             // Act
             seeder.Add(user);
-
-            var seeds = seeder.GenerateSeeds();
 
             // Assert
             Assert.Single(seeder.Entities);
