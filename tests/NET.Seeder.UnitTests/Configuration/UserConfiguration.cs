@@ -1,8 +1,10 @@
-﻿namespace NET.Seeder.UnitTests.Configuration
+﻿using NET.Seeder.UnitTests.Entities;
+
+namespace NET.Seeder.UnitTests.Configuration
 {
-    public class UserConfiguration : SeedConfiguration<User>
+    public class UserConfiguration : ISeedConfiguration<User>
     {
-        public override void Configure(SeedBuilder<User> builder)
+        public void Configure(SeedBuilder<User> builder)
         {
             builder.WithTableName("users");
 

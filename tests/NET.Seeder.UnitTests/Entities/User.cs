@@ -1,4 +1,4 @@
-﻿namespace NET.Seeder.UnitTests
+﻿namespace NET.Seeder.UnitTests.Entities
 {
     public class User
     {

@@ -1,4 +1,6 @@
-﻿namespace NET.Seeder.UnitTests
+﻿using NET.Seeder.UnitTests.Entities;
+
+namespace NET.Seeder.UnitTests
 {
     public class SeedBuilderUnitTests
     {

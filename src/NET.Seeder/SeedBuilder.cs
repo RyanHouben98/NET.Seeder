@@ -5,8 +5,8 @@ namespace NET.Seeder
     public class SeedBuilder<TEntity> where TEntity : class
     {
         private string _tableName;
-        private Dictionary<string, string> _columnMappings;
-        private Dictionary<string, object> _values;
+        private readonly Dictionary<string, string> _columnMappings;
+        private readonly Dictionary<string, object> _values;
 
         public SeedBuilder()
         {
