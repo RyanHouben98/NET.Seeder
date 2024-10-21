@@ -3,10 +3,16 @@
     public class Seeder
     {
         public List<object> Entities;
+        private string _connectionString;
 
         public Seeder()
         {
             Entities = new List<object>();
+        }
+
+        public void AddPostgreConnecrtion(string connectionString)
+        {
+            _connectionString = connectionString;
         }
 
         public void Add(object entity)
