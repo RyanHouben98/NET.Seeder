@@ -8,10 +8,10 @@ namespace NET.Seeder.UnitTests.Configuration
         {
             builder.WithTableName("users");
 
-            builder.WithColumn(u => u.Id, "Id");
+            builder.WithColumn(u => u.Id, "id");
             builder.WithColumn(u => u.FirstName, "first_name");
             builder.WithColumn(u => u.LastName, "last_name");
-            builder.WithColumn(u => u.EmailAddress, "EmailAddress");
+            builder.WithColumn(u => u.EmailAddress, "email_address");
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace NET.Seeder
+﻿using Npgsql;
+
+namespace NET.Seeder
 {
     public class Seeder
     {
@@ -66,6 +68,41 @@
             }
 
             return seeds;
+        }
+
+        public async Task SeedAsync(List<Seed> seeds)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var transaction = await connection.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        foreach (var seed in seeds)
+                        {
+                            using (var command = new NpgsqlCommand(seed.Query, connection, transaction))
+                            {
+                                foreach(var parameter in seed.Parameters)
+                                {
+                                    command.Parameters.Add(new NpgsqlParameter(parameter.Name, parameter.Value));
+                                }
+
+                                await command.ExecuteNonQueryAsync();
+                            }
+                        }
+
+                        await transaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+
+                        throw;
+                    }
+                }
+            }
         }
 
         private object FindConfigurationInstance(Type configurationType)
